@@ -26,6 +26,10 @@ namespace Topic_3___Animation_in_Monogame
         Texture2D creamTribbleTexture;
         Rectangle creamTribbleRect;
         Vector2 creamTribbleSpeed;
+
+        Color backColor;
+
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -46,12 +50,15 @@ namespace Topic_3___Animation_in_Monogame
             brownTribbleSpeed = new Vector2(4, 4);
 
             creamTribbleRect = new Rectangle(300, 310, 100, 100);
-            creamTribbleSpeed = new Vector2(5, 5);
+            creamTribbleSpeed = new Vector2(6, 6);
 
             window = new Rectangle(0, 0, 800, 600);
             _graphics.PreferredBackBufferWidth = window.Width;
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.ApplyChanges();
+
+            backColor = Color.CornflowerBlue;
+
             base.Initialize();
         }
 
@@ -72,6 +79,10 @@ namespace Topic_3___Animation_in_Monogame
                 Exit();
 
             // TODO: Add your update logic here
+            if (greyTribbleRect.Intersects(orangeTribbleRect))
+            {
+
+            }
             greyTribbleRect.X += (int)greyTribbleSpeed.X;
             if (greyTribbleRect.Right > window.Width || greyTribbleRect.Left < 0)
                 greyTribbleSpeed.X *= -1;
@@ -81,17 +92,17 @@ namespace Topic_3___Animation_in_Monogame
 
             orangeTribbleRect.X += (int)orangeTribbleSpeed.X;
             if (orangeTribbleRect.Right > window.Width || orangeTribbleRect.Left < 0)
+            {
                 orangeTribbleSpeed.X *= -1;
-            orangeTribbleRect.Y += (int)orangeTribbleSpeed.Y;
-            if (orangeTribbleRect.Bottom > window.Height || orangeTribbleRect.Top < 0)
-                orangeTribbleSpeed.Y *= -1;
+                backColor = Color.Red;
+            }
 
-            brownTribbleRect.X += (int)brownTribbleSpeed.X;
-            if (brownTribbleRect.Right > window.Width || brownTribbleRect.Left < 0)
-                brownTribbleSpeed.X *= -1;
             brownTribbleRect.Y += (int)brownTribbleSpeed.Y;
             if (brownTribbleRect.Bottom > window.Height || brownTribbleRect.Top < 0)
+            {
                 brownTribbleSpeed.Y *= -1;
+                backColor = Color.Green;
+            }
 
             creamTribbleRect.X += (int)creamTribbleSpeed.X;
             if (creamTribbleRect.Right > window.Width || creamTribbleRect.Left < 0)
@@ -99,12 +110,20 @@ namespace Topic_3___Animation_in_Monogame
             creamTribbleRect.Y += (int)creamTribbleSpeed.Y;
             if (creamTribbleRect.Bottom > window.Height || creamTribbleRect.Top < 0)
                 creamTribbleSpeed.Y *= -1;
+
+            if (greyTribbleRect.Intersects(creamTribbleRect))
+            {
+                greyTribbleSpeed.X *= -1;
+                greyTribbleSpeed.Y *= -1;
+                creamTribbleSpeed.X *= -1;
+                creamTribbleSpeed.Y *= -1;
+            }
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(backColor);
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
