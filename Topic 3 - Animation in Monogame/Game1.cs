@@ -50,7 +50,7 @@ namespace Topic_3___Animation_in_Monogame
             brownTribbleSpeed = new Vector2(4, 4);
 
             creamTribbleRect = new Rectangle(300, 310, 100, 100);
-            creamTribbleSpeed = new Vector2(6, 6);
+            creamTribbleSpeed = new Vector2(5, 6);
 
             window = new Rectangle(0, 0, 800, 600);
             _graphics.PreferredBackBufferWidth = window.Width;
