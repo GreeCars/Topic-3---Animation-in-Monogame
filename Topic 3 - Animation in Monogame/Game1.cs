@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -26,6 +27,8 @@ namespace Topic_3___Animation_in_Monogame
         Texture2D creamTribbleTexture;
         Rectangle creamTribbleRect;
         Vector2 creamTribbleSpeed;
+
+        SoundEffect coo;
 
         Color backColor;
 
@@ -71,6 +74,7 @@ namespace Topic_3___Animation_in_Monogame
             orangeTribbleTexture = Content.Load<Texture2D>("tribbleOrange");
             brownTribbleTexture = Content.Load<Texture2D>("tribbleBrown");
             creamTribbleTexture = Content.Load<Texture2D>("tribbleCream");
+            coo = Content.Load<SoundEffect>("tribbleCoo");
         }
 
         protected override void Update(GameTime gameTime)
@@ -79,22 +83,25 @@ namespace Topic_3___Animation_in_Monogame
                 Exit();
 
             // TODO: Add your update logic here
-            if (greyTribbleRect.Intersects(orangeTribbleRect))
-            {
-
-            }
             greyTribbleRect.X += (int)greyTribbleSpeed.X;
             if (greyTribbleRect.Right > window.Width || greyTribbleRect.Left < 0)
+            {
                 greyTribbleSpeed.X *= -1;
+                coo.Play();
+            }
             greyTribbleRect.Y += (int)greyTribbleSpeed.Y;
             if (greyTribbleRect.Bottom > window.Height || greyTribbleRect.Top < 0)
+            {
                 greyTribbleSpeed.Y *= -1;
+                coo.Play();
+            }
 
             orangeTribbleRect.X += (int)orangeTribbleSpeed.X;
             if (orangeTribbleRect.Right > window.Width || orangeTribbleRect.Left < 0)
             {
                 orangeTribbleSpeed.X *= -1;
                 backColor = Color.Red;
+                coo.Play();
             }
 
             brownTribbleRect.Y += (int)brownTribbleSpeed.Y;
@@ -102,14 +109,21 @@ namespace Topic_3___Animation_in_Monogame
             {
                 brownTribbleSpeed.Y *= -1;
                 backColor = Color.Green;
+                coo.Play();
             }
 
             creamTribbleRect.X += (int)creamTribbleSpeed.X;
             if (creamTribbleRect.Right > window.Width || creamTribbleRect.Left < 0)
+            {
                 creamTribbleSpeed.X *= -1;
+                coo.Play();
+            }
             creamTribbleRect.Y += (int)creamTribbleSpeed.Y;
             if (creamTribbleRect.Bottom > window.Height || creamTribbleRect.Top < 0)
+            {
                 creamTribbleSpeed.Y *= -1;
+                coo.Play();
+            }
 
             if (greyTribbleRect.Intersects(creamTribbleRect))
             {
