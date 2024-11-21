@@ -5,6 +5,11 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Topic_3___Animation_in_Monogame
 {
+    enum screen
+    {
+        Intro,
+        TribbleYard
+    }
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
@@ -27,6 +32,12 @@ namespace Topic_3___Animation_in_Monogame
         Texture2D creamTribbleTexture;
         Rectangle creamTribbleRect;
         Vector2 creamTribbleSpeed;
+
+        Texture2D introTexture;
+
+        screen screen;
+
+        MouseState mouseState;
 
         SoundEffect coo;
 
@@ -60,6 +71,8 @@ namespace Topic_3___Animation_in_Monogame
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.ApplyChanges();
 
+            screen = screen.Intro;
+
             backColor = Color.CornflowerBlue;
 
             base.Initialize();
@@ -74,63 +87,72 @@ namespace Topic_3___Animation_in_Monogame
             orangeTribbleTexture = Content.Load<Texture2D>("tribbleOrange");
             brownTribbleTexture = Content.Load<Texture2D>("tribbleBrown");
             creamTribbleTexture = Content.Load<Texture2D>("tribbleCream");
-            coo = Content.Load<SoundEffect>("tribbleCoo");
+            coo = Content.Load<SoundEffect>("tribble_coo");
+            introTexture = Content.Load<Texture2D>("tribbleIntro");
         }
 
         protected override void Update(GameTime gameTime)
         {
+            mouseState = Mouse.GetState();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            if (screen == screen.Intro)
+            {
+                if (mouseState.LeftButton == ButtonState.Pressed)
+                    screen = screen.TribbleYard;
+            }
+            else if (screen == screen.TribbleYard)
+            {
+                // TODO: Add your update logic here
+                greyTribbleRect.X += (int)greyTribbleSpeed.X;
+                if (greyTribbleRect.Right > window.Width || greyTribbleRect.Left < 0)
+                {
+                    greyTribbleSpeed.X *= -1;
+                    coo.Play();
+                }
+                greyTribbleRect.Y += (int)greyTribbleSpeed.Y;
+                if (greyTribbleRect.Bottom > window.Height || greyTribbleRect.Top < 0)
+                {
+                    greyTribbleSpeed.Y *= -1;
+                    coo.Play();
+                }
 
-            // TODO: Add your update logic here
-            greyTribbleRect.X += (int)greyTribbleSpeed.X;
-            if (greyTribbleRect.Right > window.Width || greyTribbleRect.Left < 0)
-            {
-                greyTribbleSpeed.X *= -1;
-                coo.Play();
-            }
-            greyTribbleRect.Y += (int)greyTribbleSpeed.Y;
-            if (greyTribbleRect.Bottom > window.Height || greyTribbleRect.Top < 0)
-            {
-                greyTribbleSpeed.Y *= -1;
-                coo.Play();
-            }
+                orangeTribbleRect.X += (int)orangeTribbleSpeed.X;
+                if (orangeTribbleRect.Right > window.Width || orangeTribbleRect.Left < 0)
+                {
+                    orangeTribbleSpeed.X *= -1;
+                    backColor = Color.Red;
+                    coo.Play();
+                }
 
-            orangeTribbleRect.X += (int)orangeTribbleSpeed.X;
-            if (orangeTribbleRect.Right > window.Width || orangeTribbleRect.Left < 0)
-            {
-                orangeTribbleSpeed.X *= -1;
-                backColor = Color.Red;
-                coo.Play();
-            }
+                brownTribbleRect.Y += (int)brownTribbleSpeed.Y;
+                if (brownTribbleRect.Bottom > window.Height || brownTribbleRect.Top < 0)
+                {
+                    brownTribbleSpeed.Y *= -1;
+                    backColor = Color.Green;
+                    coo.Play();
+                }
 
-            brownTribbleRect.Y += (int)brownTribbleSpeed.Y;
-            if (brownTribbleRect.Bottom > window.Height || brownTribbleRect.Top < 0)
-            {
-                brownTribbleSpeed.Y *= -1;
-                backColor = Color.Green;
-                coo.Play();
-            }
+                creamTribbleRect.X += (int)creamTribbleSpeed.X;
+                if (creamTribbleRect.Right > window.Width || creamTribbleRect.Left < 0)
+                {
+                    creamTribbleSpeed.X *= -1;
+                    coo.Play();
+                }
+                creamTribbleRect.Y += (int)creamTribbleSpeed.Y;
+                if (creamTribbleRect.Bottom > window.Height || creamTribbleRect.Top < 0)
+                {
+                    creamTribbleSpeed.Y *= -1;
+                    coo.Play();
+                }
 
-            creamTribbleRect.X += (int)creamTribbleSpeed.X;
-            if (creamTribbleRect.Right > window.Width || creamTribbleRect.Left < 0)
-            {
-                creamTribbleSpeed.X *= -1;
-                coo.Play();
-            }
-            creamTribbleRect.Y += (int)creamTribbleSpeed.Y;
-            if (creamTribbleRect.Bottom > window.Height || creamTribbleRect.Top < 0)
-            {
-                creamTribbleSpeed.Y *= -1;
-                coo.Play();
-            }
-
-            if (greyTribbleRect.Intersects(creamTribbleRect))
-            {
-                greyTribbleSpeed.X *= -1;
-                greyTribbleSpeed.Y *= -1;
-                creamTribbleSpeed.X *= -1;
-                creamTribbleSpeed.Y *= -1;
+                if (greyTribbleRect.Intersects(creamTribbleRect))
+                {
+                    greyTribbleSpeed.X *= -1;
+                    greyTribbleSpeed.Y *= -1;
+                    creamTribbleSpeed.X *= -1;
+                    creamTribbleSpeed.Y *= -1;
+                }
             }
             base.Update(gameTime);
         }
@@ -142,10 +164,17 @@ namespace Topic_3___Animation_in_Monogame
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
 
-            _spriteBatch.Draw(greyTribbleTexture, greyTribbleRect, Color.White);
-            _spriteBatch.Draw(orangeTribbleTexture, orangeTribbleRect, Color.White);
-            _spriteBatch.Draw(brownTribbleTexture, brownTribbleRect, Color.White);
-            _spriteBatch.Draw(creamTribbleTexture, creamTribbleRect, Color.White);
+            if (screen == screen.Intro)
+            {
+                _spriteBatch.Draw(introTexture, window, Color.White);
+            }
+            else if (screen == screen.TribbleYard)
+            {
+                _spriteBatch.Draw(greyTribbleTexture, greyTribbleRect, Color.White);
+                _spriteBatch.Draw(orangeTribbleTexture, orangeTribbleRect, Color.White);
+                _spriteBatch.Draw(brownTribbleTexture, brownTribbleRect, Color.White);
+                _spriteBatch.Draw(creamTribbleTexture, creamTribbleRect, Color.White);
+            }
 
             _spriteBatch.End();
             base.Draw(gameTime);
